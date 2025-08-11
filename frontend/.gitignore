@@ -1,0 +1,34 @@
+# --- OS / Editor ---
+*.swp
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# --- env files (모든 패키지 공통) ---
+**/.env
+**/.env.*
+!**/.env.example
+
+# --- Node / package managers ---
+**/node_modules/
+**/coverage/
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/pnpm-debug.log*
+
+# --- Next.js (frontend) ---
+**/.next/
+**/.vercel/
+**/.turbo/
+
+# --- NestJS build (backend) ---
+**/dist/
+
+# --- App artifacts ---
+# 업로드/변환 결과는 커밋하지 않음 (폴더는 .gitkeep으로 유지)
+backend/uploads/*
+!backend/uploads/.gitkeep
+backend/converted/*
+!backend/converted/.gitkeep
