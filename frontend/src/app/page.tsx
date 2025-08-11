@@ -8,9 +8,9 @@ type Target = 'mac' | 'windows-webm' | 'windows-mp4'
 export default function Home() {
   const [file, setFile] = useState<File | null>(null)
   const [target, setTarget] = useState<Target>('mac')
-  const [width, setWidth] = useState(1920)
-  const [height, setHeight] = useState(1080)
-  const [fps, setFps] = useState(30)
+  const [width, setWidth] = useState<number | ''>('')
+  const [height, setHeight] = useState<number | ''>('')
+  const [fps, setFps] = useState<number | ''>('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [downloadUrl, setDownloadUrl] = useState('')
@@ -47,9 +47,10 @@ export default function Home() {
   // convert
   const onConvert = async () => {
     if (!file) {
-      setError('파일을 선택하세요.')
+      setError('동영상을 선택해주세요.')
       return
     }
+
     setLoading(true)
     setError('')
     setDownloadUrl('')
@@ -58,19 +59,21 @@ export default function Home() {
       const fd = new FormData()
       fd.append('file', file)
       fd.append('target', target)
-      fd.append('width', String(width))
-      fd.append('height', String(height))
-      fd.append('fps', String(fps))
+      if (width !== '') fd.append('width', String(width))
+      if (height !== '') fd.append('height', String(height))
+      if (fps !== '') fd.append('fps', String(fps))
 
       const res = await fetch(`${API_BASE}/convert`, {
         method: 'POST',
         body: fd,
       })
       if (!res.ok) throw new Error(await res.text())
-      const data = await res.json()
-      setDownloadUrl(`${API_BASE}${data.url}`)
-    } catch (e) {
-      setError(e?.message || '변환 실패')
+
+      const data: { url: string } = await res.json()
+      setDownloadUrl(`${API_BASE}${data.url}`) // ✅ API_BASE (오타 금지) + 백틱
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : '변환 실패' // ✅ unknown 안전 처리
+      setError(msg)
     } finally {
       setLoading(false)
     }
