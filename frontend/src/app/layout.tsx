@@ -1,41 +1,41 @@
 import './globals.css'
-import type { Metadata } from 'next'
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
-const siteName = 'Wallpaper Converter'
-const description =
-  '동영상을 macOS(.mov)·Windows(.webm/.mp4) 배경화면 포맷으로 변환'
-
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: { default: siteName, template: `%s · ${siteName}` },
-  description,
-  alternates: { canonical: '/' },
-  openGraph: {
-    type: 'website',
-    url: siteUrl,
-    siteName,
-    title: siteName,
-    description,
-    images: [{ url: '/og.jpg', width: 1200, height: 630, alt: siteName }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: siteName,
-    description,
-    images: ['/og.jpg'],
-  },
-}
+import Script from 'next/script'
+import Footer from '@/components/Footer'
+import AdBanner from '@/components/AdBanner'
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const enableAds = process.env.NEXT_PUBLIC_ENABLE_ADS === '1'
+
   return (
     <html lang="ko">
+      <head>
+        <Script
+          id="adsense-loader"
+          strategy="afterInteractive"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5687181207100282"
+          crossOrigin="anonymous"
+        />
+
+        {enableAds && (
+          <Script
+            id="adsense-loader"
+            strategy="afterInteractive"
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+            crossOrigin="anonymous"
+          />
+        )}
+      </head>
       <body className="min-h-screen bg-slate-950 text-slate-50 antialiased flex flex-col">
-        {children}
+        <main className="flex-1">{children}</main>
+
+        {/* 🔽 푸터 바로 위 광고 */}
+        {enableAds && <AdBanner />}
+
+        <Footer />
       </body>
     </html>
   )
