@@ -1,6 +1,25 @@
 'use client'
 
 import { useMemo, useState, useCallback, useRef, useEffect } from 'react'
+import JsonLd from '@/components/JsonLd'
+
+const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+const webAppLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Wallpaper Converter',
+  url: base,
+  applicationCategory: 'Multimedia',
+  operatingSystem: 'macOS, Windows',
+  description: '동영상을 배경화면 포맷으로 변환',
+}
+const orgLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'hyojeong yang',
+  url: base,
+  logo: `${base}/apple-touch-icon.png`,
+}
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:4000'
 type Target = 'mac' | 'windows-webm' | 'windows-mp4'
@@ -8,9 +27,9 @@ type Target = 'mac' | 'windows-webm' | 'windows-mp4'
 export default function Home() {
   const [file, setFile] = useState<File | null>(null)
   const [target, setTarget] = useState<Target>('mac')
-  const [width, setWidth] = useState<number | ''>('')
-  const [height, setHeight] = useState<number | ''>('')
-  const [fps, setFps] = useState<number | ''>('')
+  const [width, setWidth] = useState<number | ''>(1920)
+  const [height, setHeight] = useState<number | ''>(1080)
+  const [fps, setFps] = useState<number | ''>(30)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [downloadUrl, setDownloadUrl] = useState('')
@@ -291,6 +310,9 @@ export default function Home() {
           }
         }
       `}</style>
+
+      <JsonLd json={webAppLd} />
+      <JsonLd json={orgLd} />
     </main>
   )
 }
