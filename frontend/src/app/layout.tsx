@@ -13,13 +13,6 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
-        <Script
-          id="adsense-loader"
-          strategy="afterInteractive"
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5687181207100282"
-          crossOrigin="anonymous"
-        />
-
         {enableAds && (
           <Script
             id="adsense-loader"
