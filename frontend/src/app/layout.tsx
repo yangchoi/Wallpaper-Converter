@@ -15,7 +15,6 @@ export default function RootLayout({
       <body className="min-h-screen bg-slate-950 text-slate-50 antialiased flex flex-col">
         <main className="flex-1">{children}</main>
 
-        {/* 🔽 푸터 바로 위 광고 */}
         {enableAds && <AdBanner />}
 
         <Footer />
