@@ -1,5 +1,7 @@
 'use client'
-import { useEffect } from 'react'
+
+import { useEffect, useRef } from 'react'
+
 declare global {
   interface Window {
     adsbygoogle: unknown[]
@@ -7,11 +9,21 @@ declare global {
 }
 
 export default function AdBanner() {
+  const inited = useRef(false)
+
   useEffect(() => {
+    if (inited.current) return
     try {
-      /* @ts-ignore */ ;(window.adsbygoogle = window.adsbygoogle || []).push({})
-    } catch {}
+      if (typeof window !== 'undefined') {
+        window.adsbygoogle = window.adsbygoogle || []
+        ;(window.adsbygoogle as unknown[]).push({})
+        inited.current = true
+      }
+    } catch {
+      /* dev/애드블록/미승인인 경우 무시 */
+    }
   }, [])
+
   return (
     <div className="border-t border-slate-800 bg-slate-900/60">
       <div className="max-w-5xl mx-auto px-6 py-6">
